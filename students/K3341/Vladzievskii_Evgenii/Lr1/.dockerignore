@@ -1,0 +1,16 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env
+.git
+.gitignore
+.pytest_cache/
+site/
+*.db
+finance.db
+.DS_Store
+docs/
+mkdocs.yml
+plan.md
+README.md
