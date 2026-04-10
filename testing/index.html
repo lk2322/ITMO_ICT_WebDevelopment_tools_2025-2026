@@ -599,10 +599,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#test_authpy-6" class="md-nav__link">
+  <a href="#test_authpy-11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        test_auth.py (6 тестов)
+        test_auth.py (11 тестов)
       
     </span>
   </a>
@@ -777,10 +777,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#test_authpy-6" class="md-nav__link">
+  <a href="#test_authpy-11" class="md-nav__link">
     <span class="md-ellipsis">
       
-        test_auth.py (6 тестов)
+        test_auth.py (11 тестов)
       
     </span>
   </a>
@@ -866,7 +866,7 @@
 
 <h1 id="_1">Тестирование<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
 <h2 id="_2">Обзор<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>Проект содержит <strong>33 модульных теста</strong>, покрывающих все эндпоинты API. Тесты используют <code>pytest</code> с <code>httpx.TestClient</code> и изолированную in-memory SQLite базу данных.</p>
+<p>Проект содержит <strong>38 модульных тестов</strong>, покрывающих все эндпоинты API. Тесты используют <code>pytest</code> с <code>httpx.TestClient</code> и изолированную in-memory SQLite базу данных.</p>
 <h2 id="_3">Запуск тестов<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="c1"># Все тесты</span>
 pytest<span class="w"> </span>tests/<span class="w"> </span>-v
@@ -884,7 +884,7 @@ pytest<span class="w"> </span>tests/<span class="w"> </span>-xvs
 <div class="highlight"><pre><span></span><code>tests/
 ├── __init__.py
 ├── conftest.py          # Фикстуры (engine, session, client, auth_headers)
-├── test_auth.py         # 6 тестов аутентификации
+├── test_auth.py         # 11 тестов аутентификации
 ├── test_categories.py   # 6 тестов категорий
 ├── test_transactions.py # 7 тестов транзакций
 ├── test_budgets.py      # 7 тестов бюджетов
@@ -943,7 +943,7 @@ pytest<span class="w"> </span>tests/<span class="w"> </span>-xvs
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
 </code></pre></div>
 <h2 id="_6">Покрытие тестами<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<h3 id="test_authpy-6">test_auth.py (6 тестов)<a class="headerlink" href="#test_authpy-6" title="Permanent link">&para;</a></h3>
+<h3 id="test_authpy-11">test_auth.py (11 тестов)<a class="headerlink" href="#test_authpy-11" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -975,6 +975,26 @@ pytest<span class="w"> </span>tests/<span class="w"> </span>-xvs
 <tr>
 <td><code>test_protected_endpoint_with_token</code></td>
 <td>Доступ с токеном → 200</td>
+</tr>
+<tr>
+<td><code>test_get_current_user_info</code></td>
+<td>Получение информации о текущем пользователе</td>
+</tr>
+<tr>
+<td><code>test_get_current_user_info_without_token</code></td>
+<td>Доступ к /auth/me без токена → 401</td>
+</tr>
+<tr>
+<td><code>test_get_users</code></td>
+<td>Получение списка пользователей</td>
+</tr>
+<tr>
+<td><code>test_change_password</code></td>
+<td>Смена пароля и вход с новым паролем</td>
+</tr>
+<tr>
+<td><code>test_change_password_wrong_old</code></td>
+<td>Смена пароля с неверным старым паролем → 400</td>
 </tr>
 </tbody>
 </table>
@@ -1131,7 +1151,7 @@ pytest<span class="w"> </span>tests/<span class="w"> </span>-xvs
 </tbody>
 </table>
 <h2 id="_7">Результаты<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>33 passed in 12.00s
+<div class="highlight"><pre><span></span><code>38 passed in 14.26s
 </code></pre></div>
 <p>Все тесты проходят успешно. ✅</p>
 
