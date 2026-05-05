@@ -1,0 +1,21 @@
+site_name: ЛР3 — Docker, очереди и парсер
+site_description: Лабораторная работа №3 — упаковка FastAPI в Docker, Celery + Redis
+site_author: Владзиевский Евгений (K3341)
+repo_url: https://github.com/lk2322/ITMO_ICT_WebDevelopment_tools_2025-2026
+repo_name: GitHub
+docs_dir: docs
+
+theme:
+  name: material
+  language: ru
+  palette:
+    primary: indigo
+    accent: indigo
+
+nav:
+  - Главная: index.md
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - tables
