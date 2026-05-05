@@ -1,0 +1,28 @@
+site_name: Web-программирование — Лабораторные работы
+site_description: Лабораторные работы по дисциплине Средства Web-программирования (ИТМО, K3341)
+site_author: Владзиевский Евгений (K3341)
+repo_url: https://github.com/lk2322/ITMO_ICT_WebDevelopment_tools_2025-2026
+repo_name: GitHub
+docs_dir: docs
+
+theme:
+  name: material
+  language: ru
+  palette:
+    primary: indigo
+    accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - content.code.copy
+
+nav:
+  - Главная: index.md
+  - Лабораторная работа 1: lr1.md
+  - Лабораторная работа 2: lr2.md
+  - Лабораторная работа 3: lr3.md
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - tables
