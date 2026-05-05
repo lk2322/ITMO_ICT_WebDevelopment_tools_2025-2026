@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Документация по лабораторной работе №2 (Threading, Multiprocessing, Async)">
+        <meta name="description" content="Лабораторная работа №3 — упаковка FastAPI в Docker, Celery + Redis">
       
       
         <meta name="author" content="Владзиевский Евгений (K3341)">
@@ -23,7 +23,7 @@
     
     
       
-        <title>Лабораторная работа №2 — Потоки. Процессы. Асинхронность</title>
+        <title>ЛР3 — Docker, очереди и парсер</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#no2" class="md-skip">
+        <a href="#no3-fastapi-docker" class="md-skip">
           Перейти к содержанию
         </a>
       
@@ -84,9 +84,11 @@
     
       
 
-<header class="md-header" data-md-component="header">
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Верхний колонтитул">
-    <a href="." title="Лабораторная работа №2 — Потоки. Процессы. Асинхронность" class="md-header__button md-logo" aria-label="Лабораторная работа №2 — Потоки. Процессы. Асинхронность" data-md-component="logo">
+    <a href="." title="ЛР3 — Docker, очереди и парсер" class="md-header__button md-logo" aria-label="ЛР3 — Docker, очереди и парсер" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -100,7 +102,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            Лабораторная работа №2 — Потоки. Процессы. Асинхронность
+            ЛР3 — Docker, очереди и парсер
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -180,36 +182,6 @@
       
         
           
-            
-<nav class="md-tabs" aria-label="Вкладки" data-md-component="tabs">
-  <div class="md-grid">
-    <ul class="md-tabs__list">
-      
-        
-  
-  
-  
-    
-  
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
-        
-  
-  
-    
-  
-  Главная
-
-      </a>
-    </li>
-  
-
-      
-    </ul>
-  </div>
-</nav>
-          
         
       
       <main class="md-main" data-md-component="main">
@@ -223,18 +195,16 @@
                     
 
 
-  
 
-
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Навигация" data-md-level="0">
+<nav class="md-nav md-nav--primary" aria-label="Навигация" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Лабораторная работа №2 — Потоки. Процессы. Асинхронность" class="md-nav__button md-logo" aria-label="Лабораторная работа №2 — Потоки. Процессы. Асинхронность" data-md-component="logo">
+    <a href="." title="ЛР3 — Docker, очереди и парсер" class="md-nav__button md-logo" aria-label="ЛР3 — Docker, очереди и парсер" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
 
     </a>
-    Лабораторная работа №2 — Потоки. Процессы. Асинхронность
+    ЛР3 — Docker, очереди и парсер
   </label>
   
     <div class="md-nav__source">
@@ -332,6 +302,56 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
+        Выполненные задачи
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Выполненные задачи">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-fastapi-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Подзадача 1 — Упаковка FastAPI, БД и парсера в Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-fastapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Подзадача 2 — Вызов парсера из FastAPI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-celery-redis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Подзадача 3 — Вызов парсера через очередь Celery + Redis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         Структура проекта
       
     </span>
@@ -340,162 +360,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-threading-multiprocessing-async" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Задача 1. Различия между threading, multiprocessing и async
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Задача 1. Различия между threading, multiprocessing и async">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Описание
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Результаты работы программ
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cpu-bound" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Бенчмарк (CPU-bound задача)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Анализ результатов
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Задача 2. Параллельный парсинг веб-страниц
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Задача 2. Параллельный парсинг веб-страниц">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Описание
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Реализации
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#24-url-8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Результаты (24 URL, 8 воркеров)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Анализ результатов
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#url" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Список URL для парсинга
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Сравнительная таблица подходов
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Выводы
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         Запуск
@@ -506,10 +371,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_12" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Использованные технологии
+        Архитектура взаимодействия сервисов
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ключевые технологии
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Документация (GitHub Pages)
       
     </span>
   </a>
@@ -565,6 +452,56 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       
+        Выполненные задачи
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Выполненные задачи">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-fastapi-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Подзадача 1 — Упаковка FastAPI, БД и парсера в Docker
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-fastapi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Подзадача 2 — Вызов парсера из FastAPI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-celery-redis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Подзадача 3 — Вызов парсера через очередь Celery + Redis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
         Структура проекта
       
     </span>
@@ -573,162 +510,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#1-threading-multiprocessing-async" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Задача 1. Различия между threading, multiprocessing и async
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Задача 1. Различия между threading, multiprocessing и async">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Описание
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Результаты работы программ
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cpu-bound" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Бенчмарк (CPU-bound задача)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Анализ результатов
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Задача 2. Параллельный парсинг веб-страниц
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Задача 2. Параллельный парсинг веб-страниц">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Описание
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Реализации
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#24-url-8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Результаты (24 URL, 8 воркеров)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Анализ результатов
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#url" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Список URL для парсинга
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Сравнительная таблица подходов
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Выводы
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_11" class="md-nav__link">
     <span class="md-ellipsis">
       
         Запуск
@@ -739,10 +521,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_12" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Использованные технологии
+        Архитектура взаимодействия сервисов
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ключевые технологии
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github-pages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Документация (GitHub Pages)
       
     </span>
   </a>
@@ -769,481 +573,248 @@
   
 
 
-<h1 id="no2">Лабораторная работа №2 — Потоки. Процессы. Асинхронность</h1>
+<h1 id="no3-fastapi-docker">Лабораторная работа №3 — Упаковка FastAPI в Docker, работа с данными и очереди</h1>
 <p><strong>Студент:</strong> Владзиевский Евгений | <strong>Группа:</strong> K3341<br />
-<strong>Дисциплина:</strong> Средства Web-программирования | <strong>Срок сдачи:</strong> 12 мая 2026</p>
+<strong>Дисциплина:</strong> Средства Web-программирования | <strong>Срок сдачи:</strong> 2 июня 2026</p>
 <hr />
 <h2 id="_1">Цель работы</h2>
-<p>Понять отличия между потоками (threading), процессами (multiprocessing) и асинхронностью (asyncio) в Python. Освоить практические навыки создания параллельных и асинхронных программ, важные для работы с большими объёмами данных и высоконагруженными веб-сервисами.</p>
+<p>Научиться упаковывать FastAPI приложение в Docker, интегрировать парсер данных с базой данных и вызывать парсер через API и очередь задач.</p>
 <hr />
-<h2 id="_2">Структура проекта</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Lr2/
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── README.md                   # Документация
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── requirements.txt            # Зависимости
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── mkdocs.yml                  # MkDocs конфигурация
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── task1/                      # Задача 1 — Параллельное вычисление суммы
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│   ├── threading_sum.py        # Threading
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│   ├── multiprocessing_sum.py  # Multiprocessing
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│   ├── async_sum.py            # Asyncio + ProcessPoolExecutor
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   └── benchmark.py            # Сравнительный бенчмарк (CPU-bound)
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>└── task2/                      # Задача 2 — Параллельный парсинг веб-страниц
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    ├── db.py                   # Модель БД (SQLite) + вспомогательные функции
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    ├── threading_parser.py     # Threading + requests
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    ├── multiprocessing_parser.py # Multiprocessing + requests
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    └── async_parser.py         # Asyncio + aiohttp
-</code></pre></div>
-<hr />
-<h2 id="1-threading-multiprocessing-async">Задача 1. Различия между threading, multiprocessing и async</h2>
-<h3 id="_3">Описание</h3>
-<p>Написаны три программы, вычисляющие сумму всех чисел от 1 до 1 000 000 000 000 (один триллион) с использованием трёх подходов:</p>
-<ol>
-<li><strong>threading</strong> — модуль <code>threading.Thread</code></li>
-<li><strong>multiprocessing</strong> — модуль <code>multiprocessing.Pool</code></li>
-<li><strong>asyncio</strong> — <code>async/await</code> + <code>concurrent.futures.ProcessPoolExecutor</code></li>
-</ol>
-<p>Каждая программа разбивает диапазон на 8 равных частей и вычисляет частичные суммы параллельно. Для вычисления используется <strong>формула арифметической прогрессии</strong> (Гаусса):</p>
-<p>[
-S_n = \frac{(a_1 + a_n) \cdot n}{2}
-]</p>
-<p>где (n = 1\,000\,000\,000\,000), (a_1 = 1), (a_n = n).</p>
-<h3 id="_4">Результаты работы программ</h3>
-<p>Все три программы выдают одинаковый корректный результат:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Expected: 500_000_000_000_500_000_000_000
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Total:    500_000_000_000_500_000_000_000
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Match:    True ✅
-</code></pre></div>
-<h3 id="cpu-bound">Бенчмарк (CPU-bound задача)</h3>
-<p>Для наглядной демонстрации различий между подходами на CPU-bound задачах создан <code>benchmark.py</code>, который использует <code>sum(range(...))</code> — реальную C-итерацию по 100 миллионам чисел:</p>
+<h2 id="_2">Выполненные задачи</h2>
+<h3 id="1-fastapi-docker">Подзадача 1 — Упаковка FastAPI, БД и парсера в Docker</h3>
+<p>Создана многоконтейнерная система из 6 сервисов:</p>
 <table>
 <thead>
 <tr>
-<th>Подход</th>
-<th>Время (сек)</th>
-<th>Ускорение</th>
-<th>Примечание</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Sequential</strong> (базовый)</td>
-<td>1.0425</td>
-<td>—</td>
-<td>Последовательное выполнение</td>
-</tr>
-<tr>
-<td><strong>Threading</strong> (8 потоков)</td>
-<td>0.8256</td>
-<td>×1.26</td>
-<td>GIL ограничивает параллелизм</td>
-</tr>
-<tr>
-<td><strong>Multiprocessing</strong> (8 процессов)</td>
-<td>0.1694</td>
-<td>×6.15</td>
-<td>Истинный параллелизм на CPU</td>
-</tr>
-<tr>
-<td><strong>Async + ProcessPoolExecutor</strong></td>
-<td>0.1782</td>
-<td>×5.85</td>
-<td>Аналог multiprocessing</td>
-</tr>
-</tbody>
-</table>
-<h3 id="_5">Анализ результатов</h3>
-<ul>
-<li><strong>Threading</strong> — из-за GIL (Global Interpreter Lock) только один поток может исполнять Python-код одновременно. Небольшое ускорение (×1.26) происходит за счёт того, что <code>sum(range())</code> частично выполняется в C-расширении, где GIL может освобождаться.</li>
-<li><strong>Multiprocessing</strong> — каждый процесс имеет собственный GIL и выполняется на отдельном ядре CPU. Показывает наилучшее ускорение (×6.15) для CPU-bound задач. Накладные расходы на создание процессов окупаются параллельным выполнением.</li>
-<li><strong>Async + Executor</strong> — asyncio сам по себе не предназначен для CPU-bound задач, но в комбинации с <code>ProcessPoolExecutor</code> обеспечивает параллелизм на уровне, сравнимом с multiprocessing.</li>
-</ul>
-<hr />
-<h2 id="2-">Задача 2. Параллельный парсинг веб-страниц</h2>
-<h3 id="_6">Описание</h3>
-<p>Реализован параллельный парсер, который загружает 24 веб-страницы, извлекает из них заголовки (<code>&lt;title&gt;</code>) и сохраняет результаты в базу данных.</p>
-<p>База данных расширена таблицей <code>parsed_page</code>:</p>
-<table>
-<thead>
-<tr>
-<th>Поле</th>
-<th>Тип</th>
+<th>Сервис</th>
+<th>Контейнер</th>
+<th>Порт</th>
 <th>Описание</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>id</code></td>
-<td>INTEGER (PK)</td>
-<td>Уникальный идентификатор</td>
+<td><strong>API</strong></td>
+<td><code>finance-api</code></td>
+<td>8000</td>
+<td>Основное FastAPI-приложение (финансы)</td>
 </tr>
 <tr>
-<td><code>url</code></td>
-<td>VARCHAR</td>
-<td>URL спаршенной страницы</td>
+<td><strong>Parser</strong></td>
+<td><code>finance-parser</code></td>
+<td>8001</td>
+<td>FastAPI-сервис парсера веб-страниц</td>
 </tr>
 <tr>
-<td><code>title</code></td>
-<td>VARCHAR</td>
-<td>Заголовок страницы</td>
+<td><strong>DB</strong></td>
+<td><code>finance-postgres</code></td>
+<td>5432</td>
+<td>PostgreSQL 16</td>
 </tr>
 <tr>
-<td><code>status_code</code></td>
-<td>INTEGER</td>
-<td>HTTP-статус ответа</td>
+<td><strong>Redis</strong></td>
+<td><code>finance-redis</code></td>
+<td>6379</td>
+<td>Брокер для Celery</td>
 </tr>
 <tr>
-<td><code>parsed_at</code></td>
-<td>DATETIME</td>
-<td>Время парсинга</td>
+<td><strong>Celery Worker</strong></td>
+<td><code>finance-celery-worker</code></td>
+<td>–</td>
+<td>Фоновая обработка задач</td>
+</tr>
+<tr>
+<td><strong>Celery Beat</strong></td>
+<td><code>finance-celery-beat</code></td>
+<td>–</td>
+<td>Периодические задачи</td>
 </tr>
 </tbody>
 </table>
-<h3 id="_7">Реализации</h3>
-<ol>
-<li><strong>Threading</strong> — <code>threading.Thread</code> + <code>requests</code> + <code>BeautifulSoup</code></li>
-<li><strong>Multiprocessing</strong> — <code>multiprocessing.Process</code> + <code>requests</code> + очередь результатов</li>
-<li><strong>Async</strong> — <code>asyncio</code> + <code>aiohttp</code> (асинхронные HTTP-запросы) + <code>BeautifulSoup</code></li>
-</ol>
-<h3 id="24-url-8">Результаты (24 URL, 8 воркеров)</h3>
-<table>
-<thead>
-<tr>
-<th>Подход</th>
-<th>Время (сек)</th>
-<th>Успешно</th>
-<th>Без заголовка</th>
-<th>Примечание</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Threading</strong></td>
-<td>2.12</td>
-<td>24/24</td>
-<td>8</td>
-<td>Потоки + синхронный requests</td>
-</tr>
-<tr>
-<td><strong>Multiprocessing</strong></td>
-<td>1.46</td>
-<td>24/24</td>
-<td>8</td>
-<td>Процессы + синхронный requests</td>
-</tr>
-<tr>
-<td><strong>Async (aiohttp)</strong></td>
-<td>1.92</td>
-<td>24/24</td>
-<td>8</td>
-<td>Asyncio + асинхронные запросы</td>
-</tr>
-</tbody>
-</table>
-<h3 id="_8">Анализ результатов</h3>
-<p>В отличие от CPU-bound задач (Задача 1), для <strong>I/O-bound задач</strong> (сетевые запросы) все три подхода показывают сопоставимые результаты:</p>
+<h3 id="2-fastapi">Подзадача 2 — Вызов парсера из FastAPI</h3>
+<p>Добавлен эндпоинт <code>POST /parse</code> в основное FastAPI-приложение:</p>
 <ul>
-<li><strong>Threading</strong> — потоки хорошо подходят для I/O, так как GIL освобождается при блокирующих операциях ввода-вывода (сетевые вызовы <code>requests.get()</code>). Накладные расходы минимальны.</li>
-<li><strong>Multiprocessing</strong> — процессы тоже дают хороший параллелизм, но имеют бо́льшие накладные расходы на создание и межпроцессное взаимодействие (очередь <code>Queue</code>). Для чисто I/O задач это избыточно.</li>
-<li><strong>Async (aiohttp)</strong> — <strong>лучший выбор для I/O-bound задач</strong>. Все запросы выполняются в одном потоке, кооперативно переключаясь в моменты ожидания сети. Нет накладных расходов на создание потоков/процессов. Время немного выше из-за того, что Wikipedia возвращает 403 для части запросов (влияет на тайминги).</li>
+<li>Принимает <code>{"url": "https://example.com"}</code></li>
+<li>Отправляет HTTP-запрос сервису <code>parser:8001/parse</code></li>
+<li>Парсер загружает страницу, извлекает <code>&lt;title&gt;</code></li>
+<li>Возвращает результат клиенту</li>
 </ul>
-<p>Сетевые флуктуации и разное время ответа серверов объясняют небольшие расхождения в результатах. Для стабильных сетевых условий asyncio обычно показывает наилучшие результаты.</p>
-<h3 id="url">Список URL для парсинга</h3>
+<h3 id="3-celery-redis">Подзадача 3 — Вызов парсера через очередь Celery + Redis</h3>
+<p>Реализована асинхронная очередь задач:</p>
 <table>
 <thead>
 <tr>
-<th>#</th>
-<th>URL</th>
-<th>Заголовок</th>
-<th>Статус</th>
+<th>Эндпоинт</th>
+<th>Метод</th>
+<th>Описание</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>1</td>
-<td>python.org</td>
-<td>Welcome to Python.org</td>
-<td>200</td>
+<td><code>/parse/async</code></td>
+<td>POST</td>
+<td>Ставит задачу парсинга в очередь Celery, возвращает <code>task_id</code></td>
 </tr>
 <tr>
-<td>2</td>
-<td>docs.python.org/3/</td>
-<td>3.14.5rc1 Documentation</td>
-<td>200</td>
+<td><code>/parse/status/{task_id}</code></td>
+<td>GET</td>
+<td>Проверяет статус задачи (PENDING → PROGRESS → SUCCESS)</td>
 </tr>
 <tr>
-<td>3</td>
-<td>fastapi.tiangolo.com</td>
-<td>FastAPI</td>
-<td>200</td>
-</tr>
-<tr>
-<td>4</td>
-<td>wikipedia.org/wiki/Python</td>
-<td>(no title)</td>
-<td>403</td>
-</tr>
-<tr>
-<td>5</td>
-<td>wikipedia.org/wiki/Asynchronous_I/O</td>
-<td>(no title)</td>
-<td>403</td>
-</tr>
-<tr>
-<td>6</td>
-<td>wikipedia.org/wiki/Thread_(computing)</td>
-<td>(no title)</td>
-<td>403</td>
-</tr>
-<tr>
-<td>7</td>
-<td>wikipedia.org/wiki/Multiprocessing</td>
-<td>(no title)</td>
-<td>403</td>
-</tr>
-<tr>
-<td>8</td>
-<td>wikipedia.org/wiki/Web_scraping</td>
-<td>(no title)</td>
-<td>403</td>
-</tr>
-<tr>
-<td>9</td>
-<td>httpbin.org</td>
-<td>httpbin.org</td>
-<td>200</td>
-</tr>
-<tr>
-<td>10</td>
-<td>httpbin.org/status/200</td>
-<td>(no title)</td>
-<td>200</td>
-</tr>
-<tr>
-<td>11</td>
-<td>httpbin.org/status/404</td>
-<td>(no title)</td>
-<td>404</td>
-</tr>
-<tr>
-<td>12</td>
-<td>httpbin.org/headers</td>
-<td>(no title)</td>
-<td>200</td>
-</tr>
-<tr>
-<td>13</td>
-<td>sqlalchemy.org</td>
-<td>SQLAlchemy</td>
-<td>200</td>
-</tr>
-<tr>
-<td>14</td>
-<td>docs.python.org/3/library/threading</td>
-<td>threading — Thread-based parallelism</td>
-<td>200</td>
-</tr>
-<tr>
-<td>15</td>
-<td>docs.python.org/3/library/multiprocessing</td>
-<td>multiprocessing — Process-based parallelism</td>
-<td>200</td>
-</tr>
-<tr>
-<td>16</td>
-<td>docs.python.org/3/library/asyncio</td>
-<td>asyncio — Asynchronous I/O</td>
-<td>200</td>
-</tr>
-<tr>
-<td>17</td>
-<td>docs.docker.com</td>
-<td>Docker Docs</td>
-<td>200</td>
-</tr>
-<tr>
-<td>18</td>
-<td>hub.docker.com</td>
-<td>Docker Hub</td>
-<td>200</td>
-</tr>
-<tr>
-<td>19</td>
-<td>github.com</td>
-<td>GitHub</td>
-<td>200</td>
-</tr>
-<tr>
-<td>20</td>
-<td>git-scm.com</td>
-<td>Git</td>
-<td>200</td>
-</tr>
-<tr>
-<td>21</td>
-<td>postgresql.org</td>
-<td>PostgreSQL</td>
-<td>200</td>
-</tr>
-<tr>
-<td>22</td>
-<td>nginx.org</td>
-<td>nginx</td>
-<td>200</td>
-</tr>
-<tr>
-<td>23</td>
-<td>redis.io</td>
-<td>Redis</td>
-<td>200</td>
-</tr>
-<tr>
-<td>24</td>
-<td>djangoproject.com</td>
-<td>Django</td>
-<td>200</td>
+<td><code>/parse</code></td>
+<td>POST</td>
+<td>Синхронный вызов парсера (без очереди)</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="_9">Сравнительная таблица подходов</h2>
-<table>
-<thead>
-<tr>
-<th>Характеристика</th>
-<th>Threading</th>
-<th>Multiprocessing</th>
-<th>Async (asyncio)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Механизм</strong></td>
-<td>Несколько потоков в одном процессе</td>
-<td>Несколько независимых процессов</td>
-<td>Один поток, кооперативная многозадачность</td>
-</tr>
-<tr>
-<td><strong>GIL</strong></td>
-<td>Ограничивает CPU-параллелизм</td>
-<td>Свой GIL на процесс</td>
-<td>Не мешает (один поток)</td>
-</tr>
-<tr>
-<td><strong>CPU-bound</strong></td>
-<td>❌ Медленно (GIL)</td>
-<td>✅ Быстро</td>
-<td>❌ Без executor</td>
-</tr>
-<tr>
-<td><strong>I/O-bound</strong></td>
-<td>✅ Хорошо</td>
-<td>✅ Хорошо (избыточно)</td>
-<td>✅✅ Лучший выбор</td>
-</tr>
-<tr>
-<td><strong>Память</strong></td>
-<td>Общая память процесса</td>
-<td>Изолированная (копирование)</td>
-<td>Общая память</td>
-</tr>
-<tr>
-<td><strong>Создание</strong></td>
-<td>Лёгкое (~мс)</td>
-<td>Тяжёлое (~50-100мс)</td>
-<td>Легчайшее (~µс)</td>
-</tr>
-<tr>
-<td><strong>Обмен данными</strong></td>
-<td>Общие переменные (+Lock)</td>
-<td>Queue, Pipe, shared memory</td>
-<td>Общие переменные</td>
-</tr>
-<tr>
-<td><strong>Типичные применения</strong></td>
-<td>GUI, сетевые запросы, файлы</td>
-<td>Вычисления, ML, обработка данных</td>
-<td>Веб-серверы, API, БД, микросервисы</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="_10">Выводы</h2>
+<p><strong>Как работает очередь:</strong></p>
 <ol>
-<li><strong>Threading</strong> подходит для I/O-bound задач (сеть, файлы, БД). Для CPU-bound задач бесполезен из-за GIL.</li>
-<li><strong>Multiprocessing</strong> — единственный способ добиться истинного параллелизма в Python для CPU-bound задач. Цена — бо́льшие накладные расходы и изолированная память.</li>
-<li><strong>Asyncio</strong> — современный стандарт для высоконагруженных I/O-bound приложений (веб-серверы, API-клиенты). Позволяет обрабатывать тысячи соединений в одном потоке без накладных расходов на потоки/процессы.</li>
+<li>Клиент отправляет <code>POST /parse/async {"url": "..."}</code></li>
+<li>FastAPI ставит задачу в Redis через Celery</li>
+<li>Celery Worker забирает задачу из очереди</li>
+<li>Worker выполняет парсинг в фоне (загружает HTML, извлекает заголовок)</li>
+<li>Результат сохраняется в Redis</li>
+<li>Клиент запрашивает <code>GET /parse/status/{task_id}</code> для получения статуса</li>
 </ol>
-<p>Для реальных проектов выбор подхода зависит от типа нагрузки:
-- <strong>I/O-bound</strong> → asyncio (или threading как fallback)
-- <strong>CPU-bound</strong> → multiprocessing
-- <strong>Смешанная нагрузка</strong> → asyncio + ProcessPoolExecutor</p>
 <hr />
-<h2 id="_11">Запуск</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Установка зависимостей</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>venv/bin/activate
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Задача 1 — вычисление суммы</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>python<span class="w"> </span>task1/threading_sum.py
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>python<span class="w"> </span>task1/multiprocessing_sum.py
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>python<span class="w"> </span>task1/async_sum.py
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>python<span class="w"> </span>task1/benchmark.py<span class="w">       </span><span class="c1"># бенчмарк</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1"># Задача 2 — парсинг веб-страниц</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>python<span class="w"> </span>task2/threading_parser.py
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>python<span class="w"> </span>task2/multiprocessing_parser.py
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>python<span class="w"> </span>task2/async_parser.py
+<h2 id="_3">Структура проекта</h2>
+<div class="highlight"><pre><span></span><code>Lr3/
+├── app/
+│   ├── main.py                 # FastAPI app (добавлен parser router)
+│   ├── database.py             # SQLModel engine + session
+│   ├── models.py               # 6 моделей (из ЛР1)
+│   ├── schemas.py              # Pydantic схемы
+│   ├── auth.py                 # JWT аутентификация
+│   ├── dependencies.py         # Зависимости
+│   ├── crud.py                 # CRUD операции
+│   └── routers/
+│       ├── parser.py           # ** NEW: эндпоинты парсинга **
+│       ├── auth.py
+│       ├── categories.py
+│       ├── transactions.py
+│       ├── budgets.py
+│       └── tags.py
+├── parser/
+│   ├── main.py                 # ** NEW: отдельный FastAPI сервис парсера **
+│   └── Dockerfile              # ** NEW: Dockerfile для парсера **
+├── celery_app.py               # ** NEW: Celery конфигурация + задачи **
+├── Dockerfile                  # Основной Dockerfile (API + Celery)
+├── docker-compose.yml          # Оркестрация всех сервисов
+├── requirements.txt            # Зависимости (+celery, redis, requests, bs4)
+├── alembic.ini                 # Миграции БД
+├── tests/                      # Тесты (из ЛР1)
+├── .gitignore
+├── mkdocs.yml
+├── docs/
+│   └── index.md
+└── README.md
 </code></pre></div>
 <hr />
-<h2 id="_12">Использованные технологии</h2>
+<h2 id="_4">Запуск</h2>
+<div class="highlight"><pre><span></span><code><span class="c1"># 1. Запустить все сервисы одной командой</span>
+docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>--build<span class="w"> </span>-d
+
+<span class="c1"># 2. Проверить статус</span>
+docker<span class="w"> </span>compose<span class="w"> </span>ps
+
+<span class="c1"># 3. Swagger UI основного API</span>
+open<span class="w"> </span>http://localhost:8000/docs
+
+<span class="c1"># 4. Swagger UI парсера</span>
+open<span class="w"> </span>http://localhost:8001/docs
+
+<span class="c1"># 5. Синхронный парсинг</span>
+curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/parse<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;url&quot;: &quot;https://www.python.org&quot;}&#39;</span>
+
+<span class="c1"># 6. Асинхронный парсинг через очередь</span>
+curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8000/parse/async<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;url&quot;: &quot;https://www.python.org&quot;}&#39;</span>
+<span class="c1"># → {&quot;task_id&quot;: &quot;...&quot;, &quot;status&quot;: &quot;queued&quot;}</span>
+
+<span class="c1"># 7. Проверить статус задачи</span>
+curl<span class="w"> </span>http://localhost:8000/parse/status/<span class="o">{</span>task_id<span class="o">}</span>
+
+<span class="c1"># 8. Остановить</span>
+docker<span class="w"> </span>compose<span class="w"> </span>down
+docker<span class="w"> </span>compose<span class="w"> </span>down<span class="w"> </span>-v<span class="w">  </span><span class="c1"># с удалением данных</span>
+</code></pre></div>
+<hr />
+<h2 id="_5">Архитектура взаимодействия сервисов</h2>
+<div class="highlight"><pre><span></span><code>Клиент
+  │
+  ├── POST /parse ──────────► API (:8000) ──► Parser (:8001) ──► Internet
+  │                              │                    │
+  │                              │                    └── Извлекает &lt;title&gt;
+  │                              │
+  └── POST /parse/async ─────► API (:8000) ──► Redis (:6379)
+                                   │                 │
+                                   │        Celery Worker берёт задачу
+                                   │                 │
+                                   │        Worker ──► Internet ──► &lt;title&gt;
+                                   │                 │
+                                   │        Результат → Redis
+                                   │
+                              GET /parse/status/{id} → читает Redis
+</code></pre></div>
+<hr />
+<h2 id="_6">Ключевые технологии</h2>
 <table>
 <thead>
 <tr>
 <th>Компонент</th>
 <th>Технология</th>
+<th>Назначение</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Язык</td>
-<td>Python 3.12</td>
+<td>API</td>
+<td>FastAPI 0.128</td>
+<td>Основное веб-приложение</td>
 </tr>
 <tr>
-<td>Threading</td>
-<td><code>threading</code> (stdlib)</td>
+<td>Parser</td>
+<td>FastAPI + BeautifulSoup4</td>
+<td>Парсинг веб-страниц</td>
 </tr>
 <tr>
-<td>Multiprocessing</td>
-<td><code>multiprocessing</code> (stdlib)</td>
+<td>БД</td>
+<td>PostgreSQL 16 + SQLModel</td>
+<td>Хранение данных</td>
 </tr>
 <tr>
-<td>Asyncio</td>
-<td><code>asyncio</code> (stdlib)</td>
+<td>Брокер</td>
+<td>Redis 7</td>
+<td>Очередь задач Celery</td>
 </tr>
 <tr>
-<td>HTTP (sync)</td>
-<td><code>requests</code></td>
+<td>Очередь</td>
+<td>Celery 5.3</td>
+<td>Асинхронная обработка</td>
 </tr>
 <tr>
-<td>HTTP (async)</td>
-<td><code>aiohttp</code></td>
+<td>Оркестрация</td>
+<td>Docker Compose</td>
+<td>Управление контейнерами</td>
 </tr>
 <tr>
-<td>HTML-парсинг</td>
-<td><code>beautifulsoup4</code></td>
-</tr>
-<tr>
-<td>База данных</td>
-<td>SQLite + <code>sqlmodel</code></td>
-</tr>
-<tr>
-<td>Бенчмарк</td>
-<td><code>time.perf_counter()</code></td>
+<td>Документация</td>
+<td>MkDocs Material</td>
+<td>GitHub Pages</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<p><strong>Дата выполнения:</strong> 5 мая 2026<br />
-<strong>Оценка:</strong> Качество и эффективность реализации всех трёх подходов, понимание особенностей threading, multiprocessing и async, анализ и сравнение времени выполнения.</p>
+<h2 id="github-pages">Документация (GitHub Pages)</h2>
+<div class="highlight"><pre><span></span><code>mkdocs<span class="w"> </span>build<span class="w">      </span><span class="c1"># собрать</span>
+mkdocs<span class="w"> </span>serve<span class="w">      </span><span class="c1"># локальный просмотр</span>
+mkdocs<span class="w"> </span>gh-deploy<span class="w">  </span><span class="c1"># деплой на GitHub Pages</span>
+</code></pre></div>
+<hr />
+<p><strong>Дата выполнения:</strong> 5 мая 2026</p>
 
 
 
@@ -1293,7 +864,7 @@ S_n = \frac{(a_1 + a_n) \cdot n}{2}
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.sections", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": [], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": null}</script>
     
     
       <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
