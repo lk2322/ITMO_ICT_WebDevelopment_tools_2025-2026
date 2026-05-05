@@ -1,0 +1,36 @@
+site_name: Лабораторная работа №2 — Потоки. Процессы. Асинхронность
+site_description: Документация по лабораторной работе №2 (Threading, Multiprocessing, Async)
+site_author: Владзиевский Евгений (K3341)
+repo_url: https://github.com/lk2322/ITMO_ICT_WebDevelopment_tools_2025-2026
+repo_name: GitHub
+
+theme:
+  name: material
+  language: ru
+  palette:
+    primary: indigo
+    accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - content.code.copy
+
+nav:
+  - Главная: README.md
+  - Задача 1:
+      - Threading Sum: task1/threading_sum.py
+      - Multiprocessing Sum: task1/multiprocessing_sum.py
+      - Async Sum: task1/async_sum.py
+      - Benchmark: task1/benchmark.py
+  - Задача 2:
+      - БД модель: task2/db.py
+      - Threading Parser: task2/threading_parser.py
+      - Multiprocessing Parser: task2/multiprocessing_parser.py
+      - Async Parser: task2/async_parser.py
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - tables
+  - admonition
