@@ -9,7 +9,7 @@ import requests
 
 # Celery импортируется опционально — только если настроен
 try:
-    from celery_app import parse_url_task
+    from celery_app import parse_url_task, celery_app
     from celery.result import AsyncResult
 
     CELERY_AVAILABLE = True
@@ -104,7 +104,7 @@ def parse_status(task_id: str) -> dict:
             detail="Celery is not configured.",
         )
 
-    task = AsyncResult(task_id)
+    task = AsyncResult(task_id, app=celery_app)
     response = {
         "task_id": task_id,
         "status": task.state,
