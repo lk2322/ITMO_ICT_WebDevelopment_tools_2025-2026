@@ -23,8 +23,9 @@ Lr2/
 │   ├── multiprocessing_sum.py  # Multiprocessing
 │   ├── async_sum.py            # Asyncio + ProcessPoolExecutor
 │   └── benchmark.py            # Сравнительный бенчмарк (CPU-bound)
-└── task2/                      # Задача 2 — Параллельный парсинг веб-страниц
-    ├── db.py                   # Модель БД (SQLite) + вспомогательные функции
+└── task2/                      # Задача 2 — Параллельный парсинг книг
+    ├── db.py                   # Работа с БД ЛР1 (user, category, transaction)
+    ├── urls.py                 # Список URL книг (books.toscrape.com)
     ├── threading_parser.py     # Threading + requests
     ├── multiprocessing_parser.py # Multiprocessing + requests
     └── async_parser.py         # Asyncio + aiohttp
@@ -83,70 +84,51 @@ Match:    True ✅
 
 ### Описание
 
-Реализован параллельный парсер, который загружает 24 веб-страницы, извлекает из них заголовки (`<title>`) и сохраняет результаты в базу данных.
+Реализован параллельный парсер, который загружает 24 страницы книг с [books.toscrape.com](https://books.toscrape.com) (специальный сайт для практики веб-скрапинга), извлекает название книги (`<h1>`) и цену (`.price_color`), и сохраняет результат в **существующие таблицы БД из ЛР1**.
 
-База данных расширена таблицей `parsed_page`:
-
-| Поле | Тип | Описание |
-|------|-----|----------|
-| `id` | INTEGER (PK) | Уникальный идентификатор |
-| `url` | VARCHAR | URL спаршенной страницы |
-| `title` | VARCHAR | Заголовок страницы |
-| `status_code` | INTEGER | HTTP-статус ответа |
-| `parsed_at` | DATETIME | Время парсинга |
+Данные распределяются по таблицам:
+- **`user`** — создаётся служебный пользователь `parser@lab2.local`
+- **`category`** — категория «Books» (тип EXPENSE)
+- **`transaction`** — каждая книга = одна транзакция (amount = цена, description = название)
 
 ### Реализации
 
 1. **Threading** — `threading.Thread` + `requests` + `BeautifulSoup`
-2. **Multiprocessing** — `multiprocessing.Process` + `requests` + очередь результатов
+2. **Multiprocessing** — `multiprocessing.Process` + `requests` + очередь результатов (запись в БД — только в главном процессе)
 3. **Async** — `asyncio` + `aiohttp` (асинхронные HTTP-запросы) + `BeautifulSoup`
 
-### Результаты (24 URL, 8 воркеров)
+### Результаты (24 книги, 8 воркеров, PostgreSQL)
 
-| Подход | Время (сек) | Успешно | Без заголовка | Примечание |
-|--------|------------|---------|---------------|------------|
-| **Threading** | 2.12 | 24/24 | 8 | Потоки + синхронный requests |
-| **Multiprocessing** | 1.46 | 24/24 | 8 | Процессы + синхронный requests |
-| **Async (aiohttp)** | 1.92 | 24/24 | 8 | Asyncio + асинхронные запросы |
+| Подход | Время (сек) | Транзакций | Общая сумма | Примечание |
+|--------|------------|-----------|-------------|------------|
+| **Threading** | 2.39 | 24 | $866.92 | Потоки + синхронный requests |
+| **Multiprocessing** | 2.95 | 24 | $866.92 | Процессы + синхронный requests |
+| **Async (aiohttp)** | 2.06 | 24 | $866.92 | Asyncio + асинхронные запросы |
 
 ### Анализ результатов
 
-В отличие от CPU-bound задач (Задача 1), для **I/O-bound задач** (сетевые запросы) все три подхода показывают сопоставимые результаты:
+Для **I/O-bound задач** (сетевые запросы к books.toscrape.com) все три подхода показывают сопоставимые результаты:
 
-- **Threading** — потоки хорошо подходят для I/O, так как GIL освобождается при блокирующих операциях ввода-вывода (сетевые вызовы `requests.get()`). Накладные расходы минимальны.
-- **Multiprocessing** — процессы тоже дают хороший параллелизм, но имеют бо́льшие накладные расходы на создание и межпроцессное взаимодействие (очередь `Queue`). Для чисто I/O задач это избыточно.
-- **Async (aiohttp)** — **лучший выбор для I/O-bound задач**. Все запросы выполняются в одном потоке, кооперативно переключаясь в моменты ожидания сети. Нет накладных расходов на создание потоков/процессов. Время немного выше из-за того, что Wikipedia возвращает 403 для части запросов (влияет на тайминги).
+- **Async (aiohttp)** — показал лучшее время (2.06 сек). Все запросы в одном потоке, кооперативное переключение на `await`. Идеальный выбор для I/O-bound.
+- **Threading** — близкий результат (2.39 сек). GIL освобождается при блокирующем I/O (`requests.get()`), поэтому потоки эффективны для сетевых задач.
+- **Multiprocessing** — медленнее (2.95 сек) из-за накладных расходов на создание процессов и передачу данных через `Queue`. Для чисто I/O задач избыточен, но необходим для CPU-bound.
 
-Сетевые флуктуации и разное время ответа серверов объясняют небольшие расхождения в результатах. Для стабильных сетевых условий asyncio обычно показывает наилучшие результаты.
+### Список книг (первые 10 из 24)
 
-### Список URL для парсинга
+| # | Книга | Цена |
+|---|-------|------|
+| 1 | A Light in the Attic | $51.77 |
+| 2 | Tipping the Velvet | $53.74 |
+| 3 | Soumission | $50.10 |
+| 4 | Sharp Objects | $47.82 |
+| 5 | Sapiens: A Brief History of Humankind | $54.23 |
+| 6 | The Requiem Red | $22.65 |
+| 7 | The Dirty Little Secrets of Getting Your Dream Job | $33.34 |
+| 8 | The Coming Woman | $17.93 |
+| 9 | The Boys in the Boat | $22.60 |
+| 10 | The Black Maria | $52.15 |
 
-| # | URL | Заголовок | Статус |
-|---|-----|-----------|--------|
-| 1 | python.org | Welcome to Python.org | 200 |
-| 2 | docs.python.org/3/ | 3.14.5rc1 Documentation | 200 |
-| 3 | fastapi.tiangolo.com | FastAPI | 200 |
-| 4 | wikipedia.org/wiki/Python | (no title) | 403 |
-| 5 | wikipedia.org/wiki/Asynchronous_I/O | (no title) | 403 |
-| 6 | wikipedia.org/wiki/Thread_(computing) | (no title) | 403 |
-| 7 | wikipedia.org/wiki/Multiprocessing | (no title) | 403 |
-| 8 | wikipedia.org/wiki/Web_scraping | (no title) | 403 |
-| 9 | httpbin.org | httpbin.org | 200 |
-| 10 | httpbin.org/status/200 | (no title) | 200 |
-| 11 | httpbin.org/status/404 | (no title) | 404 |
-| 12 | httpbin.org/headers | (no title) | 200 |
-| 13 | sqlalchemy.org | SQLAlchemy | 200 |
-| 14 | docs.python.org/3/library/threading | threading — Thread-based parallelism | 200 |
-| 15 | docs.python.org/3/library/multiprocessing | multiprocessing — Process-based parallelism | 200 |
-| 16 | docs.python.org/3/library/asyncio | asyncio — Asynchronous I/O | 200 |
-| 17 | docs.docker.com | Docker Docs | 200 |
-| 18 | hub.docker.com | Docker Hub | 200 |
-| 19 | github.com | GitHub | 200 |
-| 20 | git-scm.com | Git | 200 |
-| 21 | postgresql.org | PostgreSQL | 200 |
-| 22 | nginx.org | nginx | 200 |
-| 23 | redis.io | Redis | 200 |
-| 24 | djangoproject.com | Django | 200 |
+Полный список: [`task2/urls.py`](task2/urls.py)
 
 ---
 
@@ -185,16 +167,19 @@ Match:    True ✅
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
+# Запуск БД из ЛР1 (PostgreSQL)
+cd ../Lr1 && docker compose up db -d && cd ../Lr2
+
 # Задача 1 — вычисление суммы
 python task1/threading_sum.py
 python task1/multiprocessing_sum.py
 python task1/async_sum.py
 python task1/benchmark.py       # бенчмарк
 
-# Задача 2 — парсинг веб-страниц
-python task2/threading_parser.py
-python task2/multiprocessing_parser.py
-python task2/async_parser.py
+# Задача 2 — парсинг книг (сохраняет в таблицы ЛР1)
+PYTHONPATH=../Lr1 python task2/threading_parser.py
+PYTHONPATH=../Lr1 python task2/multiprocessing_parser.py
+PYTHONPATH=../Lr1 python task2/async_parser.py
 ```
 
 ---
@@ -210,7 +195,7 @@ python task2/async_parser.py
 | HTTP (sync) | `requests` |
 | HTTP (async) | `aiohttp` |
 | HTML-парсинг | `beautifulsoup4` |
-| База данных | SQLite + `sqlmodel` |
+| База данных | PostgreSQL + `sqlmodel` (БД из ЛР1) |
 | Бенчмарк | `time.perf_counter()` |
 
 ---
