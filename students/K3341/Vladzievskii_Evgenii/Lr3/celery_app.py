@@ -86,10 +86,11 @@ def parse_url_task(self, url: str) -> dict:
                     select(User).where(User.email == "parser@lab3.local")
                 ).first()
                 if not user:
+                    from app.auth import get_password_hash
                     user = User(
                         email="parser@lab3.local",
                         username="parser",
-                        hashed_password="lab3parser",
+                        hashed_password=get_password_hash("lab3parser"),
                     )
                     s.add(user)
                     s.commit()
