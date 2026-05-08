@@ -14,7 +14,7 @@ import aiohttp
 from bs4 import BeautifulSoup
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from db import init_db, save_transaction, stats
+from async_db import init_db, save_transaction, stats
 from urls import BOOK_URLS
 
 URLS = BOOK_URLS
@@ -34,14 +34,14 @@ async def fetch_and_save(
                 soup = BeautifulSoup(html, "html.parser")
                 title = soup.find("h1").text.strip()
                 price_text = soup.find("p", class_="price_color").text.strip()
-                txn = save_transaction(title, price_text)
+                txn = await save_transaction(title, price_text)
                 return {"url": url, "title": title, "amount": txn["amount"]}
         except Exception as e:
             return {"url": url, "title": str(e)[:80], "amount": 0}
 
 
 async def main_async() -> None:
-    init_db()
+    await init_db()
     print(f"DB ready: {len(URLS)} books to parse\n")
 
     semaphore = asyncio.Semaphore(MAX_CONCURRENT)
@@ -57,7 +57,7 @@ async def main_async() -> None:
         results = await asyncio.gather(*tasks)
 
     elapsed = time.perf_counter() - start_time
-    db_stats = stats()
+    db_stats = await stats()
     success = sum(1 for r in results if r["amount"] > 0)
 
     print(f"\n{'='*60}")

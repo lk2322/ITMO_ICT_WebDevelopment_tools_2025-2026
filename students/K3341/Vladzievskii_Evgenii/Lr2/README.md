@@ -24,11 +24,12 @@ Lr2/
 │   ├── async_sum.py            # Asyncio + ProcessPoolExecutor
 │   └── benchmark.py            # Сравнительный бенчмарк (CPU-bound)
 └── task2/                      # Задача 2 — Параллельный парсинг книг
-    ├── db.py                   # Работа с БД ЛР1 (user, category, transaction)
+    ├── db.py                   # Синхронная БД (psycopg2): threading + multiprocessing
+    ├── async_db.py             # Асинхронная БД (asyncpg): asyncio
     ├── urls.py                 # Список URL книг (books.toscrape.com)
     ├── threading_parser.py     # Threading + requests
     ├── multiprocessing_parser.py # Multiprocessing + requests
-    └── async_parser.py         # Asyncio + aiohttp
+    └── async_parser.py         # Asyncio + aiohttp + async БД
 ```
 
 ---
@@ -95,7 +96,7 @@ Match:    True ✅
 
 1. **Threading** — `threading.Thread` + `requests` + `BeautifulSoup`
 2. **Multiprocessing** — `multiprocessing.Process` + `requests` + очередь результатов (запись в БД — только в главном процессе)
-3. **Async** — `asyncio` + `aiohttp` (асинхронные HTTP-запросы) + `BeautifulSoup`
+3. **Async** — `asyncio` + `aiohttp` (асинхронные HTTP-запросы) + `BeautifulSoup` + `async_db` (асинхронная БД через sqlalchemy.ext.asyncio + asyncpg)
 
 ### Результаты (24 книги, 8 воркеров, PostgreSQL)
 
@@ -109,7 +110,7 @@ Match:    True ✅
 
 Для **I/O-bound задач** (сетевые запросы к books.toscrape.com) все три подхода показывают сопоставимые результаты:
 
-- **Async (aiohttp)** — показал лучшее время (2.06 сек). Все запросы в одном потоке, кооперативное переключение на `await`. Идеальный выбор для I/O-bound.
+- **Async (aiohttp + async DB)** — показал лучшее время (2.06 сек). Все HTTP-запросы и операции с БД выполняются асинхронно без блокировки event loop. Идеальный выбор для I/O-bound задач с интенсивной работой с БД.
 - **Threading** — близкий результат (2.39 сек). GIL освобождается при блокирующем I/O (`requests.get()`), поэтому потоки эффективны для сетевых задач.
 - **Multiprocessing** — медленнее (2.95 сек) из-за накладных расходов на создание процессов и передачу данных через `Queue`. Для чисто I/O задач избыточен, но необходим для CPU-bound.
 
@@ -195,7 +196,8 @@ PYTHONPATH=../Lr1 python task2/async_parser.py
 | HTTP (sync) | `requests` |
 | HTTP (async) | `aiohttp` |
 | HTML-парсинг | `beautifulsoup4` |
-| База данных | PostgreSQL + `sqlmodel` (БД из ЛР1) |
+| **База данных** | PostgreSQL + `sqlmodel` (БД из ЛР1) |
+| **Async БД** | `sqlalchemy[asyncio]` + `asyncpg` |
 | Бенчмарк | `time.perf_counter()` |
 
 ---
