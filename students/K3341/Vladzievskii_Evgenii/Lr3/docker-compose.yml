@@ -83,8 +83,12 @@ services:
       --concurrency=4
       -Q celery
     environment:
+      DATABASE_URL: postgresql://finance:finance123@db:5432/finance_db
       REDIS_URL: redis://redis:6379/0
+      PARSER_URL: http://parser:8001
     depends_on:
+      db:
+        condition: service_healthy
       redis:
         condition: service_healthy
     networks:

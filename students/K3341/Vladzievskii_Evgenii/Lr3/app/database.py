@@ -13,7 +13,7 @@ if DATABASE_URL.startswith("sqlite"):
     connect_args["check_same_thread"] = False
 
 # Create engine
-engine = create_engine(DATABASE_URL, echo=True, connect_args=connect_args)
+engine = create_engine(DATABASE_URL, echo=False, connect_args=connect_args)
 
 def init_db():
     """Create all tables."""

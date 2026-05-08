@@ -29,6 +29,7 @@ class ParseRequest(BaseModel):
 class ParseResponse(BaseModel):
     url: str
     title: str | None = None
+    price: float | None = None
     status_code: int
     method: str
 
@@ -59,6 +60,7 @@ def parse_sync(request: ParseRequest) -> ParseResponse:
         return ParseResponse(
             url=data["url"],
             title=data.get("title"),
+            price=data.get("price"),
             status_code=data.get("status_code", 200),
             method="sync",
         )
