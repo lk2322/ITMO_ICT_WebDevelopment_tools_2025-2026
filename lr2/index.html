@@ -929,11 +929,12 @@
 │   ├── async_sum.py            # Asyncio + ProcessPoolExecutor
 │   └── benchmark.py            # Сравнительный бенчмарк (CPU-bound)
 └── task2/                      # Задача 2 — Параллельный парсинг книг
-    ├── db.py                   # Работа с БД ЛР1 (user, category, transaction)
+    ├── db.py                   # Синхронная БД (psycopg2): threading + multiprocessing
+    ├── async_db.py             # Асинхронная БД (asyncpg): asyncio
     ├── urls.py                 # Список URL книг (books.toscrape.com)
     ├── threading_parser.py     # Threading + requests
     ├── multiprocessing_parser.py # Multiprocessing + requests
-    └── async_parser.py         # Asyncio + aiohttp
+    └── async_parser.py         # Asyncio + aiohttp + async БД
 </code></pre></div>
 <hr />
 <h2 id="1-threading-multiprocessing-async">Задача 1. Различия между threading, multiprocessing и async</h2>
@@ -1011,7 +1012,7 @@ Match:    True ✅
 <ol>
 <li><strong>Threading</strong> — <code>threading.Thread</code> + <code>requests</code> + <code>BeautifulSoup</code></li>
 <li><strong>Multiprocessing</strong> — <code>multiprocessing.Process</code> + <code>requests</code> + очередь результатов (запись в БД — только в главном процессе)</li>
-<li><strong>Async</strong> — <code>asyncio</code> + <code>aiohttp</code> (асинхронные HTTP-запросы) + <code>BeautifulSoup</code></li>
+<li><strong>Async</strong> — <code>asyncio</code> + <code>aiohttp</code> (асинхронные HTTP-запросы) + <code>BeautifulSoup</code> + <code>async_db</code> (асинхронная БД через sqlalchemy.ext.asyncio + asyncpg)</li>
 </ol>
 <h3 id="24-8-postgresql">Результаты (24 книги, 8 воркеров, PostgreSQL)</h3>
 <table>
@@ -1051,7 +1052,7 @@ Match:    True ✅
 <h3 id="_8">Анализ результатов</h3>
 <p>Для <strong>I/O-bound задач</strong> (сетевые запросы к books.toscrape.com) все три подхода показывают сопоставимые результаты:</p>
 <ul>
-<li><strong>Async (aiohttp)</strong> — показал лучшее время (2.06 сек). Все запросы в одном потоке, кооперативное переключение на <code>await</code>. Идеальный выбор для I/O-bound.</li>
+<li><strong>Async (aiohttp + async DB)</strong> — показал лучшее время (2.06 сек). Все HTTP-запросы и операции с БД выполняются асинхронно без блокировки event loop. Идеальный выбор для I/O-bound задач с интенсивной работой с БД.</li>
 <li><strong>Threading</strong> — близкий результат (2.39 сек). GIL освобождается при блокирующем I/O (<code>requests.get()</code>), поэтому потоки эффективны для сетевых задач.</li>
 <li><strong>Multiprocessing</strong> — медленнее (2.95 сек) из-за накладных расходов на создание процессов и передачу данных через <code>Queue</code>. Для чисто I/O задач избыточен, но необходим для CPU-bound.</li>
 </ul>
@@ -1250,8 +1251,12 @@ python<span class="w"> </span>task1/benchmark.py<span class="w">       </span><s
 <td><code>beautifulsoup4</code></td>
 </tr>
 <tr>
-<td>База данных</td>
+<td><strong>База данных</strong></td>
 <td>PostgreSQL + <code>sqlmodel</code> (БД из ЛР1)</td>
+</tr>
+<tr>
+<td><strong>Async БД</strong></td>
+<td><code>sqlalchemy[asyncio]</code> + <code>asyncpg</code></td>
 </tr>
 <tr>
 <td>Бенчмарк</td>
