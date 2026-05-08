@@ -550,10 +550,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#24-url-8" class="md-nav__link">
+  <a href="#24-8-postgresql" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Результаты (24 URL, 8 воркеров)
+        Результаты (24 книги, 8 воркеров, PostgreSQL)
       
     </span>
   </a>
@@ -572,10 +572,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#url" class="md-nav__link">
+  <a href="#10-24" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Список URL для парсинга
+        Список книг (первые 10 из 24)
       
     </span>
   </a>
@@ -810,10 +810,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#24-url-8" class="md-nav__link">
+  <a href="#24-8-postgresql" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Результаты (24 URL, 8 воркеров)
+        Результаты (24 книги, 8 воркеров, PostgreSQL)
       
     </span>
   </a>
@@ -832,10 +832,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#url" class="md-nav__link">
+  <a href="#10-24" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Список URL для парсинга
+        Список книг (первые 10 из 24)
       
     </span>
   </a>
@@ -928,8 +928,9 @@
 │   ├── multiprocessing_sum.py  # Multiprocessing
 │   ├── async_sum.py            # Asyncio + ProcessPoolExecutor
 │   └── benchmark.py            # Сравнительный бенчмарк (CPU-bound)
-└── task2/                      # Задача 2 — Параллельный парсинг веб-страниц
-    ├── db.py                   # Модель БД (SQLite) + вспомогательные функции
+└── task2/                      # Задача 2 — Параллельный парсинг книг
+    ├── db.py                   # Работа с БД ЛР1 (user, category, transaction)
+    ├── urls.py                 # Список URL книг (books.toscrape.com)
     ├── threading_parser.py     # Threading + requests
     ├── multiprocessing_parser.py # Multiprocessing + requests
     └── async_parser.py         # Asyncio + aiohttp
@@ -1001,250 +1002,122 @@ Match:    True ✅
 <hr />
 <h2 id="2-">Задача 2. Параллельный парсинг веб-страниц</h2>
 <h3 id="_6">Описание</h3>
-<p>Реализован параллельный парсер, который загружает 24 веб-страницы, извлекает из них заголовки (<code>&lt;title&gt;</code>) и сохраняет результаты в базу данных.</p>
-<p>База данных расширена таблицей <code>parsed_page</code>:</p>
-<table>
-<thead>
-<tr>
-<th>Поле</th>
-<th>Тип</th>
-<th>Описание</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>id</code></td>
-<td>INTEGER (PK)</td>
-<td>Уникальный идентификатор</td>
-</tr>
-<tr>
-<td><code>url</code></td>
-<td>VARCHAR</td>
-<td>URL спаршенной страницы</td>
-</tr>
-<tr>
-<td><code>title</code></td>
-<td>VARCHAR</td>
-<td>Заголовок страницы</td>
-</tr>
-<tr>
-<td><code>status_code</code></td>
-<td>INTEGER</td>
-<td>HTTP-статус ответа</td>
-</tr>
-<tr>
-<td><code>parsed_at</code></td>
-<td>DATETIME</td>
-<td>Время парсинга</td>
-</tr>
-</tbody>
-</table>
+<p>Реализован параллельный парсер, который загружает 24 страницы книг с <a href="https://books.toscrape.com">books.toscrape.com</a> (специальный сайт для практики веб-скрапинга), извлекает название книги (<code>&lt;h1&gt;</code>) и цену (<code>.price_color</code>), и сохраняет результат в <strong>существующие таблицы БД из ЛР1</strong>.</p>
+<p>Данные распределяются по таблицам:
+- <strong><code>user</code></strong> — создаётся служебный пользователь <code>parser@lab2.local</code>
+- <strong><code>category</code></strong> — категория «Books» (тип EXPENSE)
+- <strong><code>transaction</code></strong> — каждая книга = одна транзакция (amount = цена, description = название)</p>
 <h3 id="_7">Реализации</h3>
 <ol>
 <li><strong>Threading</strong> — <code>threading.Thread</code> + <code>requests</code> + <code>BeautifulSoup</code></li>
-<li><strong>Multiprocessing</strong> — <code>multiprocessing.Process</code> + <code>requests</code> + очередь результатов</li>
+<li><strong>Multiprocessing</strong> — <code>multiprocessing.Process</code> + <code>requests</code> + очередь результатов (запись в БД — только в главном процессе)</li>
 <li><strong>Async</strong> — <code>asyncio</code> + <code>aiohttp</code> (асинхронные HTTP-запросы) + <code>BeautifulSoup</code></li>
 </ol>
-<h3 id="24-url-8">Результаты (24 URL, 8 воркеров)</h3>
+<h3 id="24-8-postgresql">Результаты (24 книги, 8 воркеров, PostgreSQL)</h3>
 <table>
 <thead>
 <tr>
 <th>Подход</th>
 <th>Время (сек)</th>
-<th>Успешно</th>
-<th>Без заголовка</th>
+<th>Транзакций</th>
+<th>Общая сумма</th>
 <th>Примечание</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>Threading</strong></td>
-<td>2.12</td>
-<td>24/24</td>
-<td>8</td>
+<td>2.39</td>
+<td>24</td>
+<td>$866.92</td>
 <td>Потоки + синхронный requests</td>
 </tr>
 <tr>
 <td><strong>Multiprocessing</strong></td>
-<td>1.46</td>
-<td>24/24</td>
-<td>8</td>
+<td>2.95</td>
+<td>24</td>
+<td>$866.92</td>
 <td>Процессы + синхронный requests</td>
 </tr>
 <tr>
 <td><strong>Async (aiohttp)</strong></td>
-<td>1.92</td>
-<td>24/24</td>
-<td>8</td>
+<td>2.06</td>
+<td>24</td>
+<td>$866.92</td>
 <td>Asyncio + асинхронные запросы</td>
 </tr>
 </tbody>
 </table>
 <h3 id="_8">Анализ результатов</h3>
-<p>В отличие от CPU-bound задач (Задача 1), для <strong>I/O-bound задач</strong> (сетевые запросы) все три подхода показывают сопоставимые результаты:</p>
+<p>Для <strong>I/O-bound задач</strong> (сетевые запросы к books.toscrape.com) все три подхода показывают сопоставимые результаты:</p>
 <ul>
-<li><strong>Threading</strong> — потоки хорошо подходят для I/O, так как GIL освобождается при блокирующих операциях ввода-вывода (сетевые вызовы <code>requests.get()</code>). Накладные расходы минимальны.</li>
-<li><strong>Multiprocessing</strong> — процессы тоже дают хороший параллелизм, но имеют бо́льшие накладные расходы на создание и межпроцессное взаимодействие (очередь <code>Queue</code>). Для чисто I/O задач это избыточно.</li>
-<li><strong>Async (aiohttp)</strong> — <strong>лучший выбор для I/O-bound задач</strong>. Все запросы выполняются в одном потоке, кооперативно переключаясь в моменты ожидания сети. Нет накладных расходов на создание потоков/процессов. Время немного выше из-за того, что Wikipedia возвращает 403 для части запросов (влияет на тайминги).</li>
+<li><strong>Async (aiohttp)</strong> — показал лучшее время (2.06 сек). Все запросы в одном потоке, кооперативное переключение на <code>await</code>. Идеальный выбор для I/O-bound.</li>
+<li><strong>Threading</strong> — близкий результат (2.39 сек). GIL освобождается при блокирующем I/O (<code>requests.get()</code>), поэтому потоки эффективны для сетевых задач.</li>
+<li><strong>Multiprocessing</strong> — медленнее (2.95 сек) из-за накладных расходов на создание процессов и передачу данных через <code>Queue</code>. Для чисто I/O задач избыточен, но необходим для CPU-bound.</li>
 </ul>
-<p>Сетевые флуктуации и разное время ответа серверов объясняют небольшие расхождения в результатах. Для стабильных сетевых условий asyncio обычно показывает наилучшие результаты.</p>
-<h3 id="url">Список URL для парсинга</h3>
+<h3 id="10-24">Список книг (первые 10 из 24)</h3>
 <table>
 <thead>
 <tr>
 <th>#</th>
-<th>URL</th>
-<th>Заголовок</th>
-<th>Статус</th>
+<th>Книга</th>
+<th>Цена</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>1</td>
-<td>python.org</td>
-<td>Welcome to Python.org</td>
-<td>200</td>
+<td>A Light in the Attic</td>
+<td>$51.77</td>
 </tr>
 <tr>
 <td>2</td>
-<td>docs.python.org/3/</td>
-<td>3.14.5rc1 Documentation</td>
-<td>200</td>
+<td>Tipping the Velvet</td>
+<td>$53.74</td>
 </tr>
 <tr>
 <td>3</td>
-<td>fastapi.tiangolo.com</td>
-<td>FastAPI</td>
-<td>200</td>
+<td>Soumission</td>
+<td>$50.10</td>
 </tr>
 <tr>
 <td>4</td>
-<td>wikipedia.org/wiki/Python</td>
-<td>(no title)</td>
-<td>403</td>
+<td>Sharp Objects</td>
+<td>$47.82</td>
 </tr>
 <tr>
 <td>5</td>
-<td>wikipedia.org/wiki/Asynchronous_I/O</td>
-<td>(no title)</td>
-<td>403</td>
+<td>Sapiens: A Brief History of Humankind</td>
+<td>$54.23</td>
 </tr>
 <tr>
 <td>6</td>
-<td>wikipedia.org/wiki/Thread_(computing)</td>
-<td>(no title)</td>
-<td>403</td>
+<td>The Requiem Red</td>
+<td>$22.65</td>
 </tr>
 <tr>
 <td>7</td>
-<td>wikipedia.org/wiki/Multiprocessing</td>
-<td>(no title)</td>
-<td>403</td>
+<td>The Dirty Little Secrets of Getting Your Dream Job</td>
+<td>$33.34</td>
 </tr>
 <tr>
 <td>8</td>
-<td>wikipedia.org/wiki/Web_scraping</td>
-<td>(no title)</td>
-<td>403</td>
+<td>The Coming Woman</td>
+<td>$17.93</td>
 </tr>
 <tr>
 <td>9</td>
-<td>httpbin.org</td>
-<td>httpbin.org</td>
-<td>200</td>
+<td>The Boys in the Boat</td>
+<td>$22.60</td>
 </tr>
 <tr>
 <td>10</td>
-<td>httpbin.org/status/200</td>
-<td>(no title)</td>
-<td>200</td>
-</tr>
-<tr>
-<td>11</td>
-<td>httpbin.org/status/404</td>
-<td>(no title)</td>
-<td>404</td>
-</tr>
-<tr>
-<td>12</td>
-<td>httpbin.org/headers</td>
-<td>(no title)</td>
-<td>200</td>
-</tr>
-<tr>
-<td>13</td>
-<td>sqlalchemy.org</td>
-<td>SQLAlchemy</td>
-<td>200</td>
-</tr>
-<tr>
-<td>14</td>
-<td>docs.python.org/3/library/threading</td>
-<td>threading — Thread-based parallelism</td>
-<td>200</td>
-</tr>
-<tr>
-<td>15</td>
-<td>docs.python.org/3/library/multiprocessing</td>
-<td>multiprocessing — Process-based parallelism</td>
-<td>200</td>
-</tr>
-<tr>
-<td>16</td>
-<td>docs.python.org/3/library/asyncio</td>
-<td>asyncio — Asynchronous I/O</td>
-<td>200</td>
-</tr>
-<tr>
-<td>17</td>
-<td>docs.docker.com</td>
-<td>Docker Docs</td>
-<td>200</td>
-</tr>
-<tr>
-<td>18</td>
-<td>hub.docker.com</td>
-<td>Docker Hub</td>
-<td>200</td>
-</tr>
-<tr>
-<td>19</td>
-<td>github.com</td>
-<td>GitHub</td>
-<td>200</td>
-</tr>
-<tr>
-<td>20</td>
-<td>git-scm.com</td>
-<td>Git</td>
-<td>200</td>
-</tr>
-<tr>
-<td>21</td>
-<td>postgresql.org</td>
-<td>PostgreSQL</td>
-<td>200</td>
-</tr>
-<tr>
-<td>22</td>
-<td>nginx.org</td>
-<td>nginx</td>
-<td>200</td>
-</tr>
-<tr>
-<td>23</td>
-<td>redis.io</td>
-<td>Redis</td>
-<td>200</td>
-</tr>
-<tr>
-<td>24</td>
-<td>djangoproject.com</td>
-<td>Django</td>
-<td>200</td>
+<td>The Black Maria</td>
+<td>$52.15</td>
 </tr>
 </tbody>
 </table>
+<p>Полный список: <a href="task2/urls.py"><code>task2/urls.py</code></a></p>
 <hr />
 <h2 id="_9">Сравнительная таблица подходов</h2>
 <table>
@@ -1324,16 +1197,19 @@ Match:    True ✅
 python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">source</span><span class="w"> </span>venv/bin/activate
 pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 
+<span class="c1"># Запуск БД из ЛР1 (PostgreSQL)</span>
+<span class="nb">cd</span><span class="w"> </span>../Lr1<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>db<span class="w"> </span>-d<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>../Lr2
+
 <span class="c1"># Задача 1 — вычисление суммы</span>
 python<span class="w"> </span>task1/threading_sum.py
 python<span class="w"> </span>task1/multiprocessing_sum.py
 python<span class="w"> </span>task1/async_sum.py
 python<span class="w"> </span>task1/benchmark.py<span class="w">       </span><span class="c1"># бенчмарк</span>
 
-<span class="c1"># Задача 2 — парсинг веб-страниц</span>
-python<span class="w"> </span>task2/threading_parser.py
-python<span class="w"> </span>task2/multiprocessing_parser.py
-python<span class="w"> </span>task2/async_parser.py
+<span class="c1"># Задача 2 — парсинг книг (сохраняет в таблицы ЛР1)</span>
+<span class="nv">PYTHONPATH</span><span class="o">=</span>../Lr1<span class="w"> </span>python<span class="w"> </span>task2/threading_parser.py
+<span class="nv">PYTHONPATH</span><span class="o">=</span>../Lr1<span class="w"> </span>python<span class="w"> </span>task2/multiprocessing_parser.py
+<span class="nv">PYTHONPATH</span><span class="o">=</span>../Lr1<span class="w"> </span>python<span class="w"> </span>task2/async_parser.py
 </code></pre></div>
 <hr />
 <h2 id="_12">Использованные технологии</h2>
@@ -1375,7 +1251,7 @@ python<span class="w"> </span>task2/async_parser.py
 </tr>
 <tr>
 <td>База данных</td>
-<td>SQLite + <code>sqlmodel</code></td>
+<td>PostgreSQL + <code>sqlmodel</code> (БД из ЛР1)</td>
 </tr>
 <tr>
 <td>Бенчмарк</td>
